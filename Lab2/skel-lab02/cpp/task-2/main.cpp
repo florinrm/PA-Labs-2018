@@ -42,41 +42,6 @@ class Task {
 		}
 		return count;
 
-		/*
-		int start = 0, count = 0;
-		for (int i = 0; i < dist.size(); ++i) {
-			bool ok = false;
-			while ((start + dist[i]) <= m) {
-				++i;
-				if ((start + dist[i]) > m)
-					ok = true;
-
-			}
-			if (!ok) {
-				start = dist[i - 1];
-			++count;
-			}
-		} */
-		/*
-		return count; 
-		if (dist[dist.size() - 1] <= m)
-			return 0;
-		
-		int result = 0, coord = 0, pos = 0;
-		vector<int> benzinarii;
-
-		while (coord < dist.size() - 1) {
-			pos = coord;
-			while (dist[pos] <= dist[coord] + m && pos < dist.size())
-				++pos;
-			benzinarii.push_back (dist[pos - 1]);
-			if (pos > coord - 1)
-				coord = pos - 1;
-			else
-				coord++;
-		}
-		result = benzinarii.size();
-		return result; */
 	}
 
 	void print_output(int result) {
