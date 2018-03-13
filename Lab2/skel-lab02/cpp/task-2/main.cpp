@@ -31,7 +31,6 @@ class Task {
 		*/
 		int start = 0, count = 0;
 		for (int i = 0; i < dist.size(); ++i) {
-			bool ok = false;
 			while ((dist[i] - start) <= m && i < dist.size()) {
 				i++;
 				if ((dist[i] - start) > m) {
