@@ -29,25 +29,18 @@ class Task {
 		TODO: Aflati numarul minim de opriri necesare pentru a ajunge
 		la destinatie.
 		*/
-
-		if (dist[dist.size() - 1] <= m)
-			return 0;
-
-		int start = 0;
-		vector <int> benzinarii;
+		int start = 0, count = 0;
 		for (int i = 0; i < dist.size(); ++i) {
 			bool ok = false;
 			while ((dist[i] - start) <= m && i < dist.size()) {
 				i++;
 				if ((dist[i] - start) > m) {
-					benzinarii.push_back(dist[i - 1]);
+					++count;
 					start = dist[i - 1];
 				}
 			}
 		}
-		for (int i = 0; i < benzinarii.size(); i++)
-			cout << benzinarii[i] << " ";
-		return benzinarii.size();
+		return count;
 
 		/*
 		int start = 0, count = 0;
