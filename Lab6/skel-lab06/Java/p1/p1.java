@@ -68,7 +68,11 @@ class Nim {
         /**
          * TODO Determinati daca jocul s-a terminat
          */
-        return false;
+        for (int i = 0; i < heaps.length; ++i) {
+            if (heaps[i] != 0)
+                return false;
+        }
+        return true;
     }
 
     /**
@@ -88,7 +92,11 @@ class Nim {
          * In celelalte cazuri ar trebui sa intoarca un scor cu atat
          * mai mare, cu cat player ar avea o sansa mai mare de castig
          */
-        return 0;
+        if (ended())
+            return Inf;
+        if ((heaps[0] ^ heaps[1] ^ heaps[2]) == 0)
+            return (-1) * Inf;
+        return Inf;
     }
 
     /**
@@ -100,7 +108,11 @@ class Nim {
          * TODO Realizati efectuarea mutarii
          * (scadeti move.amount din multimea corespunzatoare
          */
-        return false;
+        if (move.amount <= heaps[move.heap]) {
+            heaps[move.heap] -= move.amount;
+            return true;
+          }
+          return false;
     }
 
     /**
@@ -156,15 +168,31 @@ class P1 {
         /**
          * TODO Implementati conditia de oprire
          */
+        if (init.ended() || depth == 0)
+            return new Pair<Integer, Move>(init.eval(player), null);
+
+        int max = (-1) * Nim.Inf;
+        int score;
 
         ArrayList<Move> moves = init.get_moves(player);
+        Move resultMove = moves.get(0);
+
+        for (Move move : moves) {
+            Nim clones = (Nim) init.clone();
+            if (clones.apply_move(move)) {
+                score = (-1) * minimax(clones, player, depth - 1).first;
+                if (score > max) {
+                    max = score;
+                    resultMove = move;
+                }
+            }
+        }
 
         /**
-         * TODO Determinati cel mai bun scor si cea mai buna mutare
-         * folosind algoritmul minimax
+         * TODO Determinati cel mai bun scor si cea mai buna mutare folosind
+         * algoritmul minimax
          */
-
-        return new Pair<Integer, Move>(-Nim.Inf, new Move());
+        return new Pair<Integer, Move>(max, resultMove);
     }
 
     /**
@@ -178,13 +206,26 @@ class P1 {
          * TODO Implementati conditia de oprire
          */
 
+        if (init.ended() || depth == 0)
+            return new Pair<Integer, Move>(init.eval(player), null);;
+    
         ArrayList<Move> moves = init.get_moves(player);
-        /**
-         * TODO Determinati cel mai bun scor si cea mai buna mutare
-         * folosind algoritmul minimax cu alfa-beta pruning
-         */
-
-        return new Pair<Integer, Move>(-Nim.Inf, new Move());
+        int score;
+        Move moveRes = moves.get(0);
+        
+        for (Move move: moves) {
+        Nim clones = (Nim) init.clone();
+        if (clones.apply_move(move)) {
+            score = (-1) * minimax_abeta(clones, player, depth - 1, -beta, -alfa).first;
+            if (score >= alfa) {
+                alfa = score;
+                moveRes = move;
+            }
+            if (alfa >= beta)
+                break;
+            }
+        }
+        return new Pair<Integer, Move>(alfa, moveRes);
     }
 
     public static void main(String [] args) {
@@ -195,7 +236,7 @@ class P1 {
         System.out.print(nim);
 
         /* Choose here if you want COMP vs HUMAN or COMP vs COMP */
-        boolean HUMAN_PLAYER = true;
+        boolean HUMAN_PLAYER = false;
         int player = 1;
 
         while (!nim.ended())
